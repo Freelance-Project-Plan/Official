@@ -45,7 +45,7 @@
 
   <!-- Join Button -->
   <a target="_blank" href="https://t.me/priyasharma4t" class="telegram-button"
-    onclick="trackSubscribe(event)">
+    onclick="trackSubscribe()">
     Apply on Telegram
   </a><br>
 
@@ -186,32 +186,21 @@
     }
   </script>
 
-  <script>
-    
-      // ✅ Config define kar diya (error fix)
-  const config = {
-    telegramLink: "https://t.me/priyasharma4t"
-  };
-
-   function trackSubscribe(event) {
-    event.preventDefault();
-
-    const telegramUrl = config.telegramLink;
-
-    if (localStorage.getItem('telegram_subscribed') === 'true') {
-        window.open(telegramUrl, "_blank");
-        return;
+<script>
+  function trackSubscribe() {
+    if (localStorage.getItem('subscribed') === 'true') {
+      console.log("Already subscribed event fired, not sending again.");
+      return;
     }
+
+    const eventId = 'subscribe_' + Date.now();
 
     if (typeof fbq === "function") {
-        fbq('track', 'Subscribe');
-        localStorage.setItem('telegram_subscribed', 'true');
+      fbq('trackCustom', 'Subscribe', {}, { eventID: eventId });
     }
 
-    setTimeout(function() {
-        window.open(telegramUrl, "_blank");
-    }, 400);
-}
+    localStorage.setItem('subscribed', 'true');
+  }
 </script>
 
 </body>
