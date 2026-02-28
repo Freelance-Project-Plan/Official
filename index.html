@@ -44,10 +44,12 @@
   <h4>India's No. 1 Trusted Company: PaperScript Outsourcing</h4>
 
   <!-- Join Button -->
-  <a target="_blank" href="https://t.me/priyasharma4t" class="telegram-button"
-    onclick="trackSubscribe()">
-    Apply on Telegram
-  </a><br>
+ <a target="_blank"
+   href="https://t.me/priyasharma4t"
+   class="telegram-button"
+   id="telegramBtn">
+   Apply on Telegram
+</a><br>
 
   <!-- Project Section -->
   <div class="projects">
@@ -187,20 +189,35 @@
   </script>
 
 <script>
-  function trackSubscribe() {
-    if (localStorage.getItem('subscribed') === 'true') {
-      console.log("Already subscribed event fired, not sending again.");
+(function() {
+
+  const btn = document.getElementById("telegramBtn");
+
+  btn.addEventListener("click", function(e) {
+
+    // Allow real human click only
+    if (!e.isTrusted) {
+      e.preventDefault();
       return;
     }
 
-    const eventId = 'subscribe_' + Date.now();
-
-    if (typeof fbq === "function") {
-      fbq('trackCustom', 'Subscribe', {}, { eventID: eventId });
+    // Already tracked on this device?
+    if (localStorage.getItem("telegramTracked") === "true") {
+      return;
     }
 
-    localStorage.setItem('subscribed', 'true');
-  }
+    // Mark as tracked permanently
+    localStorage.setItem("telegramTracked", "true");
+
+    const eventId = "tg_" + Date.now();
+
+    if (typeof fbq !== "undefined") {
+      fbq('track', 'Subscribe', {}, { eventID: eventId });
+    }
+
+  });
+
+})();
 </script>
 
 </body>
